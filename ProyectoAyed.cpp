@@ -619,17 +619,6 @@ char _cuadrado[7][5] = {{'1', '1', '1', '1', '1'},
                         {'1', '0', '0', '0', '1'},
                         {'1', '1', '1', '1', '1'}};
 
-void extenderArray(string *array, int indice, int extensiones)
-{
-    string *newArray = new string[indice + 10];
-    for (int i = 0; i < indice; i++)
-    {
-        newArray[i] = array[i];
-    }
-    array = newArray;
-    delete[] newArray;
-}
-
 void imprimirArray(string *array, int cantidadElementos)
 {
     for (int i = 0; i < cantidadElementos; i++)
@@ -638,25 +627,37 @@ void imprimirArray(string *array, int cantidadElementos)
     }
 }
 
+string *extenderArray(string *array, int cantidadElementos)
+{
+    string *newArray = new string[cantidadElementos + 10];
+    for (int i = 0; i < cantidadElementos; i++)
+    {
+        newArray[i] = array[i];
+    }
+    delete[] array;
+    return newArray;
+}
+
 int main()
 {
-    string *paquete = new string[10];
-    int extensiones = 10;
-    int indicePaquete = 0;
+    int cantidadElementos = 10;
+    string *paquetes = new string[cantidadElementos];
+    int indicePaquetes = 0;
     string entrada;
-    do
+
+    cin >> entrada;
+    while (entrada != "ENJOY")
     {
+        paquetes[indicePaquetes] = entrada;
+        indicePaquetes++;
+        if (indicePaquetes >= cantidadElementos)
+        {
+            paquetes = extenderArray(paquetes, cantidadElementos);
+            cantidadElementos += 10;
+        }
         cin >> entrada;
-        if (entrada == "ENJOY")
-        {
-            break;
-        }
-        paquete[indicePaquete] = entrada;
-        indicePaquete++;
-        if (indicePaquete >= extensiones)
-        {
-            extenderArray(paquete, indicePaquete, extensiones);
-        }
-    } while (entrada != "ENJOY");
-    imprimirArray(paquete, indicePaquete + 1);
+    }
+
+    imprimirArray(paquetes, indicePaquetes);
+    delete[] paquetes;
 }
