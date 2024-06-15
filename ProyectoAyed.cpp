@@ -638,6 +638,41 @@ string *extenderArray(string *array, int cantidadElementos)
     return newArray;
 }
 
+void extraerSegmentos(int **matriz, int m)
+{
+    int multiplicador = 0;
+    int caracteres = m / 7;
+
+    while (multiplicador < caracteres)
+    {
+        // Esquina Superior Izquierda
+        cout << matriz[0 + multiplicador * 7][0] << matriz[0 + multiplicador * 7][1] << endl;
+        cout << matriz[1 + multiplicador * 7][0] << matriz[1 + multiplicador * 7][1] << endl;
+        cout << matriz[2 + multiplicador * 7][0] << matriz[2 + multiplicador * 7][1] << endl;
+        cout << endl;
+
+        // Esquina Superior Derecha
+        cout << matriz[0 + multiplicador * 7][3] << matriz[0 + multiplicador * 7][4] << endl;
+        cout << matriz[1 + multiplicador * 7][3] << matriz[1 + multiplicador * 7][4] << endl;
+        cout << matriz[2 + multiplicador * 7][3] << matriz[2 + multiplicador * 7][4] << endl;
+        cout << endl;
+
+        // Esquina Inferior Izquierda
+        cout << matriz[4 + multiplicador * 7][0] << matriz[4 + multiplicador * 7][1] << endl;
+        cout << matriz[5 + multiplicador * 7][0] << matriz[5 + multiplicador * 7][1] << endl;
+        cout << matriz[6 + multiplicador * 7][0] << matriz[6 + multiplicador * 7][1] << endl;
+        cout << endl;
+
+        // Esquina Inferior Derecha
+        cout << matriz[4 + multiplicador * 7][3] << matriz[4 + multiplicador * 7][4] << endl;
+        cout << matriz[5 + multiplicador * 7][3] << matriz[5 + multiplicador * 7][4] << endl;
+        cout << matriz[6 + multiplicador * 7][3] << matriz[6 + multiplicador * 7][4] << endl;
+        cout << endl;
+
+        multiplicador++;
+    }
+}
+
 int main()
 {
     int cantidadElementos = 10;
