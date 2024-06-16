@@ -673,6 +673,36 @@ void extraerSegmentos(int **matriz, int m)
     }
 }
 
+void convertirMatriz(string arr[], string **matriz, int filas)
+{
+    int contador = 0;
+    for (int i = 0; i < filas; i++)
+    {
+        matriz[i] = new string[5];
+    }
+    for (int i = 0; i < filas; i++)
+    {
+        for (int j = 0; j < 5; j++)
+        {
+            matriz[i][j] = arr[contador];
+            contador++;
+        }
+    }
+}
+
+void imprimirMatriz(string **matriz, int filas, int columnas)
+{
+    for (int i = 0; i < filas; i++)
+    {
+        for (int j = 0; j < columnas; j++)
+        {
+            cout << matriz[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
+}
+
 int main()
 {
     int cantidadElementos = 10;
@@ -693,6 +723,20 @@ int main()
         cin >> entrada;
     }
 
+    // imprimirArray
     imprimirArray(paquetes, indicePaquetes);
+
+    // Matriz
+    int filas = indicePaquetes / 5;
+    string **matriz = new string *[filas];
+    convertirMatriz(paquetes, matriz, filas);
+    imprimirMatriz(matriz, filas, 5);
+
+    // Delete
+    for (int i = 0; i < filas; i++)
+    {
+        delete[] matriz[i];
+    }
+    delete[] matriz;
     delete[] paquetes;
 }
