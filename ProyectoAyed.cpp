@@ -643,6 +643,7 @@ private:
     string matriz[3][2];
 
 public:
+    Segmento() = default;
     Segmento(string valores[6])
     {
         int contador = 0;
@@ -669,12 +670,11 @@ public:
     }
 };
 
-void extraerSegmentos(string **matriz, int m)
+void extraerSegmentos(string **matriz, Segmento segmentos[], int m)
 {
     int multiplicador = 0;
     int caracteres = m / 7;
-    int cantidadSegmentos = caracteres * 4;
-    Segmento segmentos[cantidadSegmentos];
+    int contador = 0;
     while (multiplicador < caracteres)
     {
         // Esquina Superior Izquierda
@@ -686,7 +686,8 @@ void extraerSegmentos(string **matriz, int m)
         arr1[4] = matriz[2 + multiplicador * 7][0];
         arr1[5] = matriz[2 + multiplicador * 7][1];
         Segmento segmento1(arr1);
-        segmento1.imprimirMatriz();
+        segmentos[contador] = segmento1;
+        contador++;
 
         // Esquina Superior Derecha
         string arr2[6];
@@ -697,7 +698,8 @@ void extraerSegmentos(string **matriz, int m)
         arr2[4] = matriz[2 + multiplicador * 7][3];
         arr2[5] = matriz[2 + multiplicador * 7][4];
         Segmento segmento2(arr2);
-        segmento2.imprimirMatriz();
+        segmentos[contador] = segmento2;
+        contador++;
 
         // Esquina Inferior Izquierda
         string arr3[6];
@@ -708,7 +710,8 @@ void extraerSegmentos(string **matriz, int m)
         arr3[4] = matriz[6 + multiplicador * 7][0];
         arr3[5] = matriz[6 + multiplicador * 7][1];
         Segmento segmento3(arr3);
-        segmento3.imprimirMatriz();
+        segmentos[contador] = segmento3;
+        contador++;
 
         // Esquina Inferior Derecha
         string arr4[6];
@@ -719,7 +722,8 @@ void extraerSegmentos(string **matriz, int m)
         arr4[4] = matriz[6 + multiplicador * 7][3];
         arr4[5] = matriz[6 + multiplicador * 7][4];
         Segmento segmento4(arr4);
-        segmento4.imprimirMatriz();
+        segmentos[contador] = segmento4;
+        contador++;
 
         multiplicador++;
     }
@@ -788,7 +792,13 @@ int main()
     imprimirMatriz(matriz, filas, 5);
 
     // Guardar Segmentos
-    extraerSegmentos(matriz, filas);
+    int cantidadSegmentos = (filas / 7) * 4;
+    Segmento *segmentos = new Segmento[cantidadSegmentos];
+    extraerSegmentos(matriz, segmentos, filas);
+    for (int i = 0; i < cantidadElementos; i++)
+    {
+        segmentos[i].imprimirMatriz();
+    }
 
     // Delete
     for (int i = 0; i < filas; i++)
@@ -797,4 +807,5 @@ int main()
     }
     delete[] matriz;
     delete[] paquetes;
+    delete[] segmentos;
 }
