@@ -637,36 +637,89 @@ string *extenderArray(string *array, int cantidadElementos)
     return newArray;
 }
 
+class Segmento
+{
+private:
+    string matriz[3][2];
+
+public:
+    Segmento(string valores[6])
+    {
+        int contador = 0;
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 2; j++)
+            {
+                matriz[i][j] = valores[contador];
+                contador++;
+            }
+        }
+    }
+    void imprimirMatriz()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 2; j++)
+            {
+                cout << matriz[i][j] << " ";
+            }
+            cout << endl;
+        }
+        cout << endl;
+    }
+};
+
 void extraerSegmentos(string **matriz, int m)
 {
     int multiplicador = 0;
     int caracteres = m / 7;
-
+    int cantidadSegmentos = caracteres * 4;
+    Segmento segmentos[cantidadSegmentos];
     while (multiplicador < caracteres)
     {
         // Esquina Superior Izquierda
-        cout << matriz[0 + multiplicador * 7][0] << matriz[0 + multiplicador * 7][1] << endl;
-        cout << matriz[1 + multiplicador * 7][0] << matriz[1 + multiplicador * 7][1] << endl;
-        cout << matriz[2 + multiplicador * 7][0] << matriz[2 + multiplicador * 7][1] << endl;
-        cout << endl;
+        string arr1[6];
+        arr1[0] = matriz[0 + multiplicador * 7][0];
+        arr1[1] = matriz[0 + multiplicador * 7][1];
+        arr1[2] = matriz[1 + multiplicador * 7][0];
+        arr1[3] = matriz[1 + multiplicador * 7][1];
+        arr1[4] = matriz[2 + multiplicador * 7][0];
+        arr1[5] = matriz[2 + multiplicador * 7][1];
+        Segmento segmento1(arr1);
+        segmento1.imprimirMatriz();
 
         // Esquina Superior Derecha
-        cout << matriz[0 + multiplicador * 7][3] << matriz[0 + multiplicador * 7][4] << endl;
-        cout << matriz[1 + multiplicador * 7][3] << matriz[1 + multiplicador * 7][4] << endl;
-        cout << matriz[2 + multiplicador * 7][3] << matriz[2 + multiplicador * 7][4] << endl;
-        cout << endl;
+        string arr2[6];
+        arr2[0] = matriz[0 + multiplicador * 7][3];
+        arr2[1] = matriz[0 + multiplicador * 7][4];
+        arr2[2] = matriz[1 + multiplicador * 7][3];
+        arr2[3] = matriz[1 + multiplicador * 7][4];
+        arr2[4] = matriz[2 + multiplicador * 7][3];
+        arr2[5] = matriz[2 + multiplicador * 7][4];
+        Segmento segmento2(arr2);
+        segmento2.imprimirMatriz();
 
         // Esquina Inferior Izquierda
-        cout << matriz[4 + multiplicador * 7][0] << matriz[4 + multiplicador * 7][1] << endl;
-        cout << matriz[5 + multiplicador * 7][0] << matriz[5 + multiplicador * 7][1] << endl;
-        cout << matriz[6 + multiplicador * 7][0] << matriz[6 + multiplicador * 7][1] << endl;
-        cout << endl;
+        string arr3[6];
+        arr3[0] = matriz[4 + multiplicador * 7][0];
+        arr3[1] = matriz[4 + multiplicador * 7][1];
+        arr3[2] = matriz[5 + multiplicador * 7][0];
+        arr3[3] = matriz[5 + multiplicador * 7][1];
+        arr3[4] = matriz[6 + multiplicador * 7][0];
+        arr3[5] = matriz[6 + multiplicador * 7][1];
+        Segmento segmento3(arr3);
+        segmento3.imprimirMatriz();
 
         // Esquina Inferior Derecha
-        cout << matriz[4 + multiplicador * 7][3] << matriz[4 + multiplicador * 7][4] << endl;
-        cout << matriz[5 + multiplicador * 7][3] << matriz[5 + multiplicador * 7][4] << endl;
-        cout << matriz[6 + multiplicador * 7][3] << matriz[6 + multiplicador * 7][4] << endl;
-        cout << endl;
+        string arr4[6];
+        arr4[0] = matriz[4 + multiplicador * 7][3];
+        arr4[1] = matriz[4 + multiplicador * 7][4];
+        arr4[2] = matriz[5 + multiplicador * 7][3];
+        arr4[3] = matriz[5 + multiplicador * 7][4];
+        arr4[4] = matriz[6 + multiplicador * 7][3];
+        arr4[5] = matriz[6 + multiplicador * 7][4];
+        Segmento segmento4(arr4);
+        segmento4.imprimirMatriz();
 
         multiplicador++;
     }
