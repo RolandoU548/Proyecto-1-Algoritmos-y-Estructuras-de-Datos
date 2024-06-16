@@ -638,7 +638,7 @@ string *extenderArray(string *array, int cantidadElementos)
     return newArray;
 }
 
-void extraerSegmentos(int **matriz, int m)
+void extraerSegmentos(string **matriz, int m)
 {
     int multiplicador = 0;
     int caracteres = m / 7;
@@ -705,6 +705,7 @@ void imprimirMatriz(string **matriz, int filas, int columnas)
 
 int main()
 {
+    // Leer entrada y guardar en array
     int cantidadElementos = 10;
     string *paquetes = new string[cantidadElementos];
     int indicePaquetes = 0;
@@ -723,14 +724,19 @@ int main()
         cin >> entrada;
     }
 
-    // imprimirArray
+    // Imprimir Array
     imprimirArray(paquetes, indicePaquetes);
 
     // Matriz
     int filas = indicePaquetes / 5;
     string **matriz = new string *[filas];
     convertirMatriz(paquetes, matriz, filas);
+
+    // Imprimir Matriz
     imprimirMatriz(matriz, filas, 5);
+
+    // Guardar Segmentos
+    extraerSegmentos(matriz, filas);
 
     // Delete
     for (int i = 0; i < filas; i++)
