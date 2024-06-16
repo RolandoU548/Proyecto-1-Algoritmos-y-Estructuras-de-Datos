@@ -795,7 +795,7 @@ int main()
     int cantidadSegmentos = (filas / 7) * 4;
     Segmento *segmentos = new Segmento[cantidadSegmentos];
     extraerSegmentos(matriz, segmentos, filas);
-    for (int i = 0; i < cantidadElementos; i++)
+    for (int i = 0; i < cantidadSegmentos; i++)
     {
         segmentos[i].imprimirMatriz();
     }
