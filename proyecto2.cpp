@@ -89,6 +89,7 @@ void extraerCruz(string arr[], string cruces[], int caracteres)
 
 int main()
 {
+    // Entradas
     int cantidadElementos = 35;
     string *paquetes = new string[cantidadElementos];
     int contador = 0;
@@ -107,24 +108,10 @@ int main()
         contador++;
     }
 
-    for (int i = 0; i < contador; i++)
-    {
-        cout << paquetes[i] << " ";
-    }
-    cout << endl;
-
     // Arreglos cruces y segmentos
     int caracteres = contador / 7;
     string *cruces = new string[caracteres];
     string *segmentos = new string[caracteres * 4];
     extraerCruz(paquetes, cruces, caracteres);
     extraerSegmentos(paquetes, segmentos, caracteres);
-    for (int i = 0; i < caracteres; i++)
-    {
-        cout << cruces[i] << endl;
-    }
-    for (int i = 0; i < caracteres * 4; i++)
-    {
-        cout << segmentos[i] << endl;
-    }
 }
