@@ -1,6 +1,5 @@
 #include <iostream>
 using namespace std;
-
 const string dict[77][6] =
     {
         {"0", "10000110101", "011010", "100111", "111001", "010110"},
@@ -81,183 +80,93 @@ const string dict[77][6] =
         {"}", "10000100001", "010000", "001010", "000001", "101000"},
         {"█", "10000110001", "111010", "110101", "101011", "010111"},
 };
+// index: cantidad de letras ya completadas
+// caracteres: cantidad de cruces o letras que hay que completar. HACK; caracteres =4;
+// indiceLetra: numero de letra que se esta buscando.
+// numeroSegmento: Indica que segmento se esta buscando. El primero, segundo, tercero o cuarto. Deberia reiniciarse cada vez se completa un caracter o letra.
 
-int devolverLetras(int letras[], string cruz)
+string posiblesSegmentos[4];
+
+string identificarLetra(string cruz)
 {
-    int contador = 0;
+    for (int i = 0; i < 77; i++)
+    {
+        if (dict[i][1] == cruz && dict[i][2] == posiblesSegmentos[0] &&
+            dict[i][3] == posiblesSegmentos[1] && dict[i][4] == posiblesSegmentos[2] &&
+            dict[i][5] == posiblesSegmentos[3])
+        {
+            return dict[i][0];
+        }
+    }
+    return "";
+}
+
+bool coincideCruz(string segmento, string cruz, int numeroSegmento)
+{
     for (int i = 0; i < 77; i++)
     {
         if (dict[i][1] == cruz)
+            if (dict[i][numeroSegmento + 2] == segmento)
+                return true;
+    }
+    return false;
+}
+
+void back(string segmentos[], string cruces[], int numeroSegmento, int cantidadSegmentos, bool segmentosDisponibles[], int caracteres, int index, string palabra)
+{
+    if (index == caracteres)
+    {
+        cout << palabra << endl;
+        return;
+    }
+    for (int i = 0; i < cantidadSegmentos; i++)
+    {
+        if (segmentosDisponibles[i] && coincideCruz(segmentos[i], cruces[index], numeroSegmento))
         {
-            letras[contador] = i;
-            contador++;
+            segmentosDisponibles[i] == false;
+            posiblesSegmentos[numeroSegmento] = segmentos[i];
+            if (numeroSegmento == 3)
+            {
+                back(segmentos, cruces, 0, cantidadSegmentos, segmentosDisponibles, caracteres, index + 1, palabra + identificarLetra(cruces[index]));
+            }
+            else
+            {
+                back(segmentos, cruces, numeroSegmento + 1, cantidadSegmentos, segmentosDisponibles, caracteres, index, palabra);
+            }
+            segmentosDisponibles[i] == true;
         }
     }
-    return contador;
 }
-
-bool compararCruces(string a, string b)
-{
-    return a == b;
-}
-
-bool compararSegmentos(string a, string b)
-{
-    return a == b;
-}
-
-string *extenderArray(string *array, int cantidadElementos)
-{
-    string *newArray = new string[cantidadElementos + 35];
-    for (int i = 0; i < cantidadElementos; i++)
-    {
-        newArray[i] = array[i];
-    }
-    delete[] array;
-    return newArray;
-}
-
-void extraerSegmentos(string arr[], string segmentos[], int caracteres)
-{
-    int multiplicador = 0;
-    int contadorSegmento = 0;
-    while (multiplicador < caracteres)
-    {
-        // Esquina Superior Izquierda
-        segmentos[contadorSegmento] =
-            string(1, arr[0 + multiplicador * 7][0]) +
-            string(1, arr[0 + multiplicador * 7][1]) +
-            string(1, arr[1 + multiplicador * 7][0]) +
-            string(1, arr[1 + multiplicador * 7][1]) +
-            string(1, arr[2 + multiplicador * 7][0]) +
-            string(1, arr[2 + multiplicador * 7][1]);
-        contadorSegmento++;
-
-        // Esquina Superior Derecha
-        segmentos[contadorSegmento] =
-            string(1, arr[0 + multiplicador * 7][3]) +
-            string(1, arr[0 + multiplicador * 7][4]) +
-            string(1, arr[1 + multiplicador * 7][3]) +
-            string(1, arr[1 + multiplicador * 7][4]) +
-            string(1, arr[2 + multiplicador * 7][3]) +
-            string(1, arr[2 + multiplicador * 7][4]);
-        contadorSegmento++;
-
-        // Esquina Inferior Izquierda
-        segmentos[contadorSegmento] =
-            string(1, arr[4 + multiplicador * 7][0]) +
-            string(1, arr[4 + multiplicador * 7][1]) +
-            string(1, arr[5 + multiplicador * 7][0]) +
-            string(1, arr[5 + multiplicador * 7][1]) +
-            string(1, arr[6 + multiplicador * 7][0]) +
-            string(1, arr[6 + multiplicador * 7][1]);
-        contadorSegmento++;
-
-        // Esquina Inferior Derecha
-        segmentos[contadorSegmento] =
-            string(1, arr[4 + multiplicador * 7][3]) +
-            string(1, arr[4 + multiplicador * 7][4]) +
-            string(1, arr[5 + multiplicador * 7][3]) +
-            string(1, arr[5 + multiplicador * 7][4]) +
-            string(1, arr[6 + multiplicador * 7][3]) +
-            string(1, arr[6 + multiplicador * 7][4]);
-        contadorSegmento++;
-        multiplicador++;
-    }
-}
-
-void extraerCruz(string arr[], string cruces[], int caracteres)
-{
-    int multiplicador = 0;
-    int contadorCruces = 0;
-    while (multiplicador < caracteres)
-    {
-        // Vertical
-        cruces[contadorCruces] =
-            string(1, arr[0 + multiplicador * 7][2]) +
-            string(1, arr[1 + multiplicador * 7][2]) +
-            string(1, arr[2 + multiplicador * 7][2]) +
-            string(1, arr[4 + multiplicador * 7][2]) +
-            string(1, arr[5 + multiplicador * 7][2]) +
-            string(1, arr[6 + multiplicador * 7][2]) +
-            // Horizontal
-            string(1, arr[3 + multiplicador * 7][0]) +
-            string(1, arr[3 + multiplicador * 7][1]) +
-            string(1, arr[3 + multiplicador * 7][2]) +
-            string(1, arr[3 + multiplicador * 7][3]) +
-            string(1, arr[3 + multiplicador * 7][4]);
-
-        contadorCruces++;
-        multiplicador++;
-    }
-}
-
-// void backtrackingSegmentos(int indicePosiblesLetras[], int cantidadPosiblesLetras, string segmentos[])
-// {
-//     if (completoTodasLasPosiblidades())
-//     {
-//         cout << todasLasPosibilidades << endl;
-//         return;
-//     }
-//     backtrackingSegmentos(indicePosiblesLetras, cantidadPosiblesLetras, segmentos);
-//     return;
-// }
 
 int main()
 {
-    // Entradas
-    int cantidadElementos = 35;
-    string *paquetes = new string[cantidadElementos];
-    int contador = 0;
-    string filaEntrada;
-    while (true)
-    {
-        cin >> filaEntrada;
-        if (filaEntrada == "ENJOY")
-            break;
-        if (contador >= cantidadElementos)
-        {
-            paquetes = extenderArray(paquetes, cantidadElementos);
-            cantidadElementos += 35;
-        }
-        paquetes[contador] = filaEntrada;
-        contador++;
-    }
-
-    // Arreglos cruces y segmentos
-    int caracteres = contador / 7;
-    string *cruces = new string[caracteres];
-    string *segmentos = new string[caracteres * 4];
-    bool *segmentosDisponibles = new bool[caracteres * 4];
-    for (int i = 0; i < caracteres * 4; i++)
-    {
-        segmentosDisponibles[i] = true;
-    }
-    extraerCruz(paquetes, cruces, caracteres);
-    extraerSegmentos(paquetes, segmentos, caracteres);
-    delete[] paquetes;
-    // Imprimir Cruces y Segmentos
-    // for (int i = 0; i < caracteres; i++)
-    // {
-    //     cout << cruces[i] << endl;
-    // }
-    // for (int i = 0; i < caracteres * 4; i++)
-    // {
-    //     cout << segmentos[i] << endl;
-    // }
-    // Posibles Letras
-    for (int i = 0; i < caracteres; i++)
-    {
-        int indicesPosiblesLetras[10];
-        int cantidadPosiblesLetras = devolverLetras(indicesPosiblesLetras, cruces[i]);
-        for (int i = 0; i < cantidadPosiblesLetras; i++)
-        {
-            cout << indicesPosiblesLetras[i] << endl;
-        }
-        cout << endl;
-        // backtrackingSegmentos(indicesPosiblesLetras, cantidadPosiblesLetras, segmentos);
-    }
-    // Llamar con una funcion a el backtracking por cada caracter
-    delete[] cruces;
-    delete[] segmentos;
+    string cruces[4] = {
+        "00000011111",
+        "10010010001",
+        "10000110000",
+        "00110011000",
+    };
+    int cantidadCruces = 4;
+    string segmentos[16] = {
+        "010101",
+        "011010",
+        "100101",
+        "111010",
+        "110101",
+        "011010",
+        "100100",
+        "101001",
+        "000110",
+        "101010",
+        "011000",
+        "101010",
+        "001001",
+        "101010",
+        "010101",
+        "101010",
+    };
+    bool segmentosDisponibles[16] = {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true};
+    int cantidadSegmentos = 16;
+    back(segmentos, cruces, 0, cantidadSegmentos, segmentosDisponibles, cantidadCruces, 0, "");
+    return 0;
 }

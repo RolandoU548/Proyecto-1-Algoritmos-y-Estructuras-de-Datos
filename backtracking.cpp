@@ -1,7 +1,6 @@
 #include <iostream>
 using namespace std;
-
-const string dict[77][6] =
+const string dictionary[77][6] =
     {
         {"0", "10000110101", "011010", "100111", "111001", "010110"},
         {"1", "11111100100", "000100", "000000", "000001", "000010"},
@@ -81,42 +80,6 @@ const string dict[77][6] =
         {"}", "10000100001", "010000", "001010", "000001", "101000"},
         {"█", "10000110001", "111010", "110101", "101011", "010111"},
 };
-
-int devolverLetras(int letras[], string cruz)
-{
-    int contador = 0;
-    for (int i = 0; i < 77; i++)
-    {
-        if (dict[i][1] == cruz)
-        {
-            letras[contador] = i;
-            contador++;
-        }
-    }
-    return contador;
-}
-
-bool compararCruces(string a, string b)
-{
-    return a == b;
-}
-
-bool compararSegmentos(string a, string b)
-{
-    return a == b;
-}
-
-string *extenderArray(string *array, int cantidadElementos)
-{
-    string *newArray = new string[cantidadElementos + 35];
-    for (int i = 0; i < cantidadElementos; i++)
-    {
-        newArray[i] = array[i];
-    }
-    delete[] array;
-    return newArray;
-}
-
 void extraerSegmentos(string arr[], string segmentos[], int caracteres)
 {
     int multiplicador = 0;
@@ -165,7 +128,16 @@ void extraerSegmentos(string arr[], string segmentos[], int caracteres)
         multiplicador++;
     }
 }
-
+string *extenderArray(string *array, int cantidadElementos)
+{
+    string *newArray = new string[cantidadElementos + 35];
+    for (int i = 0; i < cantidadElementos; i++)
+    {
+        newArray[i] = array[i];
+    }
+    delete[] array;
+    return newArray;
+}
 void extraerCruz(string arr[], string cruces[], int caracteres)
 {
     int multiplicador = 0;
@@ -192,16 +164,90 @@ void extraerCruz(string arr[], string cruces[], int caracteres)
     }
 }
 
-// void backtrackingSegmentos(int indicePosiblesLetras[], int cantidadPosiblesLetras, string segmentos[])
-// {
-//     if (completoTodasLasPosiblidades())
-//     {
-//         cout << todasLasPosibilidades << endl;
-//         return;
-//     }
-//     backtrackingSegmentos(indicePosiblesLetras, cantidadPosiblesLetras, segmentos);
-//     return;
-// }
+// Function to check if a given cross and segments match any dictionary entry
+bool matchPattern(string cross, string segments[4], string &result)
+{
+    for (int i = 0; i < 77; i++)
+    {
+        if (dictionary[i][1] == cross &&
+            dictionary[i][2] == segments[0] &&
+            dictionary[i][3] == segments[1] &&
+            dictionary[i][4] == segments[2] &&
+            dictionary[i][5] == segments[3])
+        {
+            result = dictionary[i][0];
+            return true;
+        }
+    }
+    return false;
+}
+
+// Backtracking function to find all possible words
+void backtrack(string cruces[], string segmentos[], int index, int caracteres, string currentWord, string *&results, int &resultCount, int &resultCapacity)
+{
+    if (index == caracteres)
+    {
+        if (resultCount >= resultCapacity)
+        {
+            resultCapacity += 10;
+            string *newResults = new string[resultCapacity];
+            for (int i = 0; i < resultCount; i++)
+            {
+                newResults[i] = results[i];
+            }
+            delete[] results;
+            results = newResults;
+        }
+        results[resultCount++] = currentWord;
+        return;
+    }
+
+    backtrack(cruces, segmentos, 0, caracteres, "", results, resultCount, resultCapacity);
+
+    for (int i = 0; i < resultCount; i++)
+    {
+        cout << results[i] << endl;
+    }
+}
+
+bool comparar(string cruz, string segmento1, string segmento2, string segmento3, string segmento4)
+{
+    for (int i = 0; i < 77; i++)
+    {
+        if (dictionary[i][1] == cruz && dictionary[i][2] == segmento1 &&
+            dictionary[i][3] == segmento2 && dictionary[i][4] == segmento3 &&
+            dictionary[i][5] == segmento4)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+void backtracking(string cruces[], string segmentos[], string palabra, int index, int caracteres)
+{
+    if (index == caracteres)
+    {
+        cout << palabra << endl;
+        return;
+    }
+
+    for (int i = 0; i < 4 * caracteres; i += 4)
+    {
+        if (comparar(cruces[index], segmentos[i], segmentos[i + 1], segmentos[i + 2], segmentos[i + 3]))
+        {
+            for (int j = 0; j < 77; j++)
+            {
+                if (dictionary[j][1] == cruces[index] && dictionary[j][2] == segmentos[i] &&
+                    dictionary[j][3] == segmentos[i + 1] && dictionary[j][4] == segmentos[i + 2] &&
+                    dictionary[j][5] == segmentos[i + 3])
+                {
+                    backtracking(cruces, segmentos, palabra + dictionary[j][0], index + 1, caracteres);
+                }
+            }
+        }
+    }
+}
 
 int main()
 {
@@ -236,28 +282,6 @@ int main()
     extraerCruz(paquetes, cruces, caracteres);
     extraerSegmentos(paquetes, segmentos, caracteres);
     delete[] paquetes;
-    // Imprimir Cruces y Segmentos
-    // for (int i = 0; i < caracteres; i++)
-    // {
-    //     cout << cruces[i] << endl;
-    // }
-    // for (int i = 0; i < caracteres * 4; i++)
-    // {
-    //     cout << segmentos[i] << endl;
-    // }
-    // Posibles Letras
-    for (int i = 0; i < caracteres; i++)
-    {
-        int indicesPosiblesLetras[10];
-        int cantidadPosiblesLetras = devolverLetras(indicesPosiblesLetras, cruces[i]);
-        for (int i = 0; i < cantidadPosiblesLetras; i++)
-        {
-            cout << indicesPosiblesLetras[i] << endl;
-        }
-        cout << endl;
-        // backtrackingSegmentos(indicesPosiblesLetras, cantidadPosiblesLetras, segmentos);
-    }
-    // Llamar con una funcion a el backtracking por cada caracter
-    delete[] cruces;
-    delete[] segmentos;
+    backtracking(cruces, segmentos, "", 0, caracteres);
+    return 0;
 }
